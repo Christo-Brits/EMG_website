@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #1C3D5A;
+    /* Deep Navy */
+    --color-accent: #007BFF;
+    /* Electric Blue */
+    --color-secondary: #D62828;
+    /* Vibrant Red - using secondary as the red accent */
+    --color-neutral-light: #F3F4F6;
+    /* Light Grey */
+
+    --font-heading: 'Montserrat', 'Oswald', sans-serif;
+    --font-body: 'Open Sans', 'Roboto', sans-serif;
+    --font-sans: 'Open Sans', 'Roboto', sans-serif;
+    /* Default sans override */
+}
+
+/* Custom Utilities */
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}

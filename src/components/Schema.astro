@@ -1,0 +1,23 @@
+---
+import type { Thing, WithContext } from "schema-dts";
+
+interface Props {
+  items: Thing | Thing[];
+}
+
+const { items } = Astro.props;
+
+const schemas = Array.isArray(items) ? items : [items];
+
+const jsonLdStrings = schemas.map((item) => {
+  const jsonLd: WithContext<Thing> = {
+    "@context": "https://schema.org",
+    ...item,
+  };
+  return JSON.stringify(jsonLd);
+});
+---
+
+{jsonLdStrings.map((jsonStr) => (
+  <script type="application/ld+json" set:html={jsonStr} />
+))}

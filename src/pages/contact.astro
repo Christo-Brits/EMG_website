@@ -1,0 +1,127 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { siteConfig } from "../config/site";
+import Button from "../components/ui/Button.astro";
+import { Phone, Mail, MapPin, AlertCircle } from "lucide-react";
+
+const title = "Contact Us";
+const description = "Get in touch with Ethyl Merc Group for quotes, service requests, or partnership enquiries.";
+---
+
+<Layout title={title} description={description}>
+  <section class="bg-primary text-white py-20">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-5xl font-heading font-bold mb-6">Contact Us</h1>
+      <p class="text-slate-300 text-lg max-w-2xl mx-auto">
+        Whether you have a commercial project, a residential repair, or want to join our collective, we're here to help.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 container mx-auto px-4">
+    <div class="grid lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
+      
+      {/* Contact Info & Urgent Box */}
+      <div class="space-y-12">
+        <div>
+          <h2 class="text-2xl font-heading font-bold text-primary mb-8">Get in Touch</h2>
+          <div class="space-y-6">
+            <div class="flex items-start gap-4">
+               <div class="w-10 h-10 bg-neutral-light rounded-full flex items-center justify-center flex-shrink-0 text-accent">
+                 <Phone className="w-5 h-5" />
+               </div>
+               <div>
+                  <h3 class="font-bold text-slate-900">Phone</h3>
+                  <a href={`tel:${siteConfig.contact.phone.replace(/\s/g, '')}`} class="text-lg text-slate-600 hover:text-accent transition-colors block mt-1">
+                    {siteConfig.contact.phone}
+                  </a>
+                  <p class="text-sm text-slate-400 mt-1">Available 24/7 for account holders</p>
+               </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+               <div class="w-10 h-10 bg-neutral-light rounded-full flex items-center justify-center flex-shrink-0 text-accent">
+                 <Mail className="w-5 h-5" />
+               </div>
+               <div>
+                  <h3 class="font-bold text-slate-900">Email</h3>
+                  <a href={`mailto:${siteConfig.contact.email}`} class="text-lg text-slate-600 hover:text-accent transition-colors block mt-1">
+                    {siteConfig.contact.email}
+                  </a>
+               </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+               <div class="w-10 h-10 bg-neutral-light rounded-full flex items-center justify-center flex-shrink-0 text-accent">
+                 <MapPin className="w-5 h-5" />
+               </div>
+               <div>
+                  <h3 class="font-bold text-slate-900">Head Office</h3>
+                  <p class="text-lg text-slate-600 mt-1 block max-w-xs">{siteConfig.contact.address}</p>
+               </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="p-6 bg-red-50 rounded-xl border border-red-100 flex gap-4">
+           <AlertCircle className="w-8 h-8 text-red-600 flex-shrink-0" />
+           <div>
+              <h3 class="font-bold text-red-900 text-lg mb-2">Emergency Response</h3>
+              <p class="text-red-700 text-sm mb-4">
+                For urgent make-safe works involving water, gas, or structural danger, please call our emergency line immediately.
+              </p>
+              <Button href={`tel:${siteConfig.contact.phone.replace(/\s/g, '')}`} variant="danger" size="sm">Call Emergency Support</Button>
+           </div>
+        </div>
+      </div>
+
+      {/* Contact Form */}
+      <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/40">
+        <h2 class="text-2xl font-heading font-bold text-primary mb-6">Send a Message</h2>
+        <form class="space-y-6">
+          <div class="grid md:grid-cols-2 gap-6">
+             <div class="space-y-2">
+               <label class="block text-sm font-bold text-slate-700">First Name</label>
+               <input type="text" class="w-full h-11 px-4 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all" required />
+             </div>
+             <div class="space-y-2">
+               <label class="block text-sm font-bold text-slate-700">Last Name</label>
+               <input type="text" class="w-full h-11 px-4 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all" required />
+             </div>
+          </div>
+          
+          <div class="space-y-2">
+            <label class="block text-sm font-bold text-slate-700">Email Address</label>
+            <input type="email" class="w-full h-11 px-4 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all" required />
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-bold text-slate-700">Enquiry Type</label>
+            <select class="w-full h-11 px-4 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all bg-white">
+               <option>General Enquiry</option>
+               <option>Request a Quote</option>
+               <option>Partnership / Recruitment</option>
+               <option>Billing Question</option>
+            </select>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-bold text-slate-700">Message</label>
+            <textarea class="w-full h-32 px-4 py-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all resize-none" required></textarea>
+          </div>
+          
+          <Button type="submit" class="w-full font-bold" size="lg">Send Message</Button>
+          <p class="text-xs text-center text-slate-400 mt-4">We typically respond within 1 business day.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  {/* Map Section */}
+  <section class="h-96 bg-slate-200 relative">
+     {/* Placeholder for Map - in production use Google Maps Embed API */}
+     <div class="absolute inset-0 flex items-center justify-center bg-slate-300">
+        <span class="font-bold text-slate-500">Service Area Map Loading...</span>
+     </div>
+  </section>
+</Layout>

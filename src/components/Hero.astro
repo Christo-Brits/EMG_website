@@ -1,0 +1,75 @@
+---
+import Button from "./ui/Button.astro";
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  image?: string;
+  primaryCtaText?: string;
+  primaryCtaLink?: string;
+  secondaryCtaText?: string;
+  secondaryCtaLink?: string;
+  showTrustIndicators?: boolean;
+}
+
+const { 
+  title, 
+  subtitle, 
+  image = "https://placehold.co/1920x1080/002B49/ffffff?text=Ethyl+Merc+Group", 
+  primaryCtaText = "Get an Instant Estimate", 
+  primaryCtaLink = "#pre-qual",
+  secondaryCtaText = "Our Services",
+  secondaryCtaLink = "#services",
+  showTrustIndicators = false
+} = Astro.props;
+---
+
+<section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-primary pt-16">
+  {/* Background */}
+  <div class="absolute inset-0 z-0">
+    {/* Gradient Overlay */}
+    <div class="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/40 z-10" />
+    
+    {/* Background Image */}
+    <div 
+      class="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-50" 
+      style={`background-image: url('${image}');`}
+    ></div>
+    
+    {/* Fallback pattern if image fails */}
+    <div class="absolute inset-0 bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:20px_20px] opacity-10 -z-10" />
+  </div>
+
+  <div class="container relative z-20 px-4">
+    <div class="max-w-3xl">
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-heading font-bold tracking-tight text-white mb-6 text-balance leading-tight">
+        {title}
+      </h1>
+      
+      {subtitle && (
+        <p class="text-lg md:text-xl text-slate-200 max-w-2xl mb-10 text-balance font-body leading-relaxed">
+          {subtitle}
+        </p>
+      )}
+      
+      <div class="flex flex-col sm:flex-row gap-4">
+        <Button href={primaryCtaLink} size="lg" variant="accent" class="text-white shadow-xl shadow-accent/20">
+          {primaryCtaText}
+        </Button>
+        <Button href={secondaryCtaLink} variant="outline" size="lg" class="text-white border-white/30 hover:bg-white/10 hover:border-white">
+          {secondaryCtaText}
+        </Button>
+      </div>
+
+      {showTrustIndicators && (
+        <div class="mt-12 pt-8 border-t border-white/10 flex flex-wrap gap-8 items-center opacity-70">
+           <span class="text-xs uppercase tracking-widest text-slate-400 font-bold">Trusted By</span>
+           {/* Placeholders for logos */}
+           <div class="h-6 w-24 bg-white/20 rounded"></div>
+           <div class="h-6 w-24 bg-white/20 rounded"></div>
+           <div class="h-6 w-24 bg-white/20 rounded"></div>
+        </div>
+      )}
+    </div>
+  </div>
+</section>

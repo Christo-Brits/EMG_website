@@ -1,0 +1,79 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Button from "../components/ui/Button.astro";
+import PreQualWizard from "../components/react/PreQualWizard";
+import { Ruler, Hammer, CheckSquare, Briefcase } from "lucide-react";
+
+const title = "Renovations & Projects";
+const description = "End-to-end management for kitchen, bathroom, and full property renovations.";
+---
+
+<Layout title={title} description={description}>
+  <Hero 
+    title="Bring Your Vision to Life" 
+    subtitle="Stress-free renovations delivered on time and on budget. We manage the entire process from design to completion."
+    image="/images/renovation-hero.jpg"
+    primaryCtaText="Start Your Project"
+    secondaryCtaText="View Gallery"
+    secondaryCtaLink="#gallery"
+  />
+
+  <section class="py-20 container mx-auto px-4">
+     <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl font-heading font-bold text-primary mb-6">Our Renovation Process</h2>
+        <p class="text-slate-600">
+           Renovations don't have to be a nightmare. Our 4-step process ensures clarity, communication, and quality at every stage.
+        </p>
+     </div>
+
+     <div class="grid md:grid-cols-4 gap-4">
+        {[
+           { step: "01", title: "Consultation", icon: Briefcase, desc: "We meet to understand your goals, budget, and timeline." },
+           { step: "02", title: "Design & Quote", icon: Ruler, desc: "Detailed plans and a fixed-price quote so there are no surprises." },
+           { step: "03", title: "Build", icon: Hammer, desc: "Our managed team of trades executes the work efficiently." },
+           { step: "04", title: "Handover", icon: CheckSquare, desc: "Final inspection, cleaning, and code of compliance." }
+        ].map((item, index) => (
+           <div class="relative p-6 pt-12 border-t-4 border-slate-100 hover:border-accent transition-colors">
+              <span class="absolute top-0 left-0 -translate-y-1/2 bg-white px-2 py-1 text-sm font-bold text-slate-400 border border-slate-200 rounded">
+                 {item.step}
+              </span>
+              <h3 class="font-bold text-lg mb-2">{item.title}</h3>
+              <p class="text-sm text-slate-600">{item.desc}</p>
+           </div>
+        ))}
+     </div>
+  </section>
+
+  <section id="estimate" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+       <div class="text-center mb-12">
+          <h2 class="text-3xl font-heading font-bold text-primary mb-4">Ballpark Your Renovation</h2>
+          <p class="text-slate-600">Get a rough idea of costs for your kitchen or bathroom project.</p>
+       </div>
+       <PreQualWizard client:load initialServiceType="renovation" />
+    </div>
+  </section>
+
+  <section id="gallery" class="py-20 bg-neutral-light">
+     <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-heading font-bold mb-8">Recent Projects</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+           {/* Placeholder Gallery Items */}
+           {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div class="aspect-square bg-slate-300 rounded-xl relative overflow-hidden group cursor-pointer">
+                 <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-6 text-center">
+                    <div>
+                       <h3 class="font-bold text-white text-xl">Project Name</h3>
+                       <p class="text-slate-200 text-sm">Kitchen Renovation • Remuera</p>
+                    </div>
+                 </div>
+              </div>
+           ))}
+        </div>
+        <div class="text-center mt-12">
+           <Button variant="outline">View Full Portfolio</Button>
+        </div>
+     </div>
+  </section>
+</Layout>

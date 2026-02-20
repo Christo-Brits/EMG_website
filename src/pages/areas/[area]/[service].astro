@@ -1,0 +1,220 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../../layouts/Layout.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import Schema from "../../../components/Schema.astro";
+import GoogleMap from "../../../components/GoogleMap.astro";
+import RelatedServices from "../../../components/RelatedServices.astro";
+import Button from "../../../components/ui/Button.astro";
+import { siteConfig } from "../../../config/site";
+import { getSlug } from "../../../utils/slug";
+
+export async function getStaticPaths() {
+  const areas = await getCollection("areas");
+  const services = await getCollection("services");
+  
+  const paths = [];
+  for (const area of areas) {
+    for (const service of services) {
+      paths.push({
+        params: { area: getSlug(area.id), service: getSlug(service.id) },
+        props: { area, service },
+      });
+    }
+  }
+  return paths;
+}
+
+const { area, service } = Astro.props;
+const areaSlug = getSlug(area.id);
+const serviceSlug = getSlug(service.id);
+
+const allServices = await getCollection("services");
+const sortedServices = allServices.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+const areas = await getCollection("areas");
+
+// Other services in this area
+const otherServicesInArea = sortedServices
+  .filter(s => s.id !== service.id)
+  .map(s => ({
+    title: s.data.title,
+    href: `/areas/${areaSlug}/${getSlug(s.id)}`,
+  }));
+
+// Same service in other areas
+const sameServiceOtherAreas = areas
+  .filter(a => a.id !== area.id)
+  .map(a => ({
+    title: `${service.data.title} in ${a.data.title}`,
+    href: `/areas/${getSlug(a.id)}/${serviceSlug}`,
+  }));
+
+const serviceSchema = {
+  "@type": "Service",
+  "name": `${service.data.title} in ${area.data.title}`,
+  "description": `Professional ${service.data.title.toLowerCase()} services in ${area.data.title}, New Zealand. ${service.data.description}`,
+  "url": `${siteConfig.url}/areas/${areaSlug}/${serviceSlug}`,
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": siteConfig.name,
+    "url": siteConfig.url,
+    "telephone": area.data.phone || siteConfig.contact.phone,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": area.data.title,
+      "addressCountry": "NZ"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": area.data.mapLat,
+      "longitude": area.data.mapLng
+    },
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": area.data.title
+  },
+  "serviceType": service.data.title,
+};
+---
+
+<Layout 
+  title={`${service.data.title} in ${area.data.title}`}
+  description={`Professional ${service.data.title.toLowerCase()} services in ${area.data.title}, New Zealand. Certified technicians, rapid response, competitive pricing. Call ${area.data.phone || siteConfig.contact.phone}.`}
+  image={service.data.heroImage}
+>
+  <Schema items={serviceSchema} />
+
+  <section class="bg-white border-b border-slate-100">
+    <div class="container mx-auto px-4">
+      <Breadcrumbs items={[
+        { label: "Home", href: "/" },
+        { label: "Areas We Serve", href: "/areas" },
+        { label: area.data.title, href: `/areas/${areaSlug}` },
+        { label: service.data.title }
+      ]} />
+    </div>
+  </section>
+
+  {/* Hero Section */}
+  <section class="relative py-20 bg-primary overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/40 z-10"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:20px_20px] opacity-10"></div>
+    <div class="container mx-auto px-4 relative z-20">
+      <div class="max-w-3xl">
+        <span class="text-accent font-bold tracking-widest uppercase text-sm mb-4 block">{area.data.title} Services</span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold tracking-tight text-white mb-6 leading-tight">
+          {service.data.title} in {area.data.title}
+        </h1>
+        <p class="text-lg text-slate-200 max-w-2xl mb-8 leading-relaxed">
+          Professional {service.data.title.toLowerCase()} for commercial and industrial properties across {area.data.title} and surrounding areas. Certified technicians with local expertise.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <Button href={`/contact?service=${serviceSlug}&area=${areaSlug}`} size="lg" variant="accent" class="shadow-xl shadow-accent/20">
+            Get a Quote
+          </Button>
+          <Button href={`tel:${area.data.phone || siteConfig.contact.phone}`} size="lg" variant="outline" class="text-white border-white/30 hover:bg-white/10">
+            Call {area.data.phone || siteConfig.contact.phone}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 container mx-auto px-4">
+    <div class="grid lg:grid-cols-3 gap-12">
+       <div class="lg:col-span-2">
+          {/* Unique content for this area-service combination */}
+          <div class="prose prose-slate max-w-none">
+            <h2>Professional {service.data.title} in {area.data.title}</h2>
+            <p>
+              Ethyl Merc Group provides expert {service.data.title.toLowerCase()} services across the {area.data.title} region. Whether you manage a commercial property in {area.data.neighborhoods?.[0] || area.data.title} or an industrial facility in {area.data.neighborhoods?.[2] || 'the greater area'}, our certified local technicians deliver reliable, high-quality solutions.
+            </p>
+
+            <h3>Why Choose EMG for {service.data.title} in {area.data.title}?</h3>
+            <ul>
+              <li><strong>Local Expertise</strong>: Our {area.data.title}-based technicians understand local building codes, council requirements, and supply chains</li>
+              <li><strong>Rapid Response</strong>: Average arrival time under 2 hours across the {area.data.title} region</li>
+              <li><strong>All Certifications</strong>: Every technician holds current NZ qualifications and undergoes regular training</li>
+              <li><strong>One Provider</strong>: Combine {service.data.title.toLowerCase()} with our other maintenance services under a single contract</li>
+            </ul>
+
+            <h3>What We Offer</h3>
+            <p>
+              Our {service.data.title.toLowerCase()} team in {area.data.title} handles both reactive callouts and scheduled maintenance programs. {service.data.description}
+            </p>
+
+            {service.data.features && (
+              <>
+                <h3>Our {service.data.title} Capabilities in {area.data.title}</h3>
+                <ul>
+                  {service.data.features.map((feature: string) => (
+                    <li>{feature}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            {area.data.neighborhoods && (
+              <>
+                <h3>Areas We Cover in {area.data.title}</h3>
+                <p>
+                  Our {service.data.title.toLowerCase()} teams service all suburbs and districts across the {area.data.title} region, including {area.data.neighborhoods.slice(0, 5).join(', ')}, and surrounding areas.
+                </p>
+              </>
+            )}
+          </div>
+       </div>
+       
+       <div class="space-y-8">
+          {/* Map */}
+          <GoogleMap lat={area.data.mapLat} lng={area.data.mapLng} title={`${service.data.title} in ${area.data.title}`} />
+
+          {/* Other services in this area */}
+          <RelatedServices services={otherServicesInArea} heading={`Other Services in ${area.data.title}`} />
+
+          {/* Same service in other areas */}
+          <RelatedServices services={sameServiceOtherAreas} heading={`${service.data.title} Elsewhere`} />
+
+          {/* Quick Links */}
+          <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+            <h3 class="font-heading font-bold text-lg mb-4 text-primary">Quick Links</h3>
+            <ul class="space-y-3 text-sm">
+              <li>
+                <a href={`/services/${serviceSlug}`} class="text-slate-600 hover:text-accent transition-colors">
+                  → {service.data.title} Overview
+                </a>
+              </li>
+              <li>
+                <a href={`/areas/${areaSlug}`} class="text-slate-600 hover:text-accent transition-colors">
+                  → All Services in {area.data.title}
+                </a>
+              </li>
+              <li>
+                <a href="/services" class="text-slate-600 hover:text-accent transition-colors">
+                  → All Services
+                </a>
+              </li>
+              <li>
+                <a href="/areas" class="text-slate-600 hover:text-accent transition-colors">
+                  → All Areas
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact CTA */}
+          <div class="bg-primary text-white p-6 rounded-xl">
+             <h3 class="font-heading font-bold text-lg mb-2">{service.data.title} in {area.data.title}</h3>
+             <p class="text-slate-300 text-sm mb-4">Get a fast quote from our local {area.data.title} team.</p>
+             <a href={`tel:${area.data.phone || siteConfig.contact.phone}`} class="block w-full text-center px-6 py-3 bg-accent rounded-lg font-bold hover:bg-accent/90 transition-colors mb-3">
+               Call {area.data.phone || siteConfig.contact.phone}
+             </a>
+             <a href={`/contact?service=${serviceSlug}&area=${areaSlug}`} class="block w-full text-center px-6 py-3 bg-white/10 border border-white/20 rounded-lg font-medium text-sm hover:bg-white/20 transition-colors">
+               Request a Quote
+             </a>
+          </div>
+       </div>
+    </div>
+  </section>
+</Layout>

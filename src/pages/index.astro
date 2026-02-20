@@ -1,0 +1,225 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import Schema from "../components/Schema.astro";
+import Button from "../components/ui/Button.astro";
+import { siteConfig } from "../config/site";
+import { getCollection } from "astro:content";
+import { getSlug } from "../utils/slug";
+
+const services = await getCollection("services");
+const sortedServices = services.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+const areas = await getCollection("areas");
+
+const orgSchema = {
+  "@type": "Organization",
+  "name": siteConfig.name,
+  "url": siteConfig.url,
+  "logo": `${siteConfig.url}/images/logo.png`,
+  "description": siteConfig.description,
+  "telephone": siteConfig.contact.phone,
+  "email": siteConfig.contact.email,
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Auckland",
+    "addressRegion": "Auckland",
+    "addressCountry": "NZ"
+  },
+  "areaServed": areas.map(area => ({
+    "@type": "City",
+    "name": area.data.title
+  })),
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": siteConfig.contact.phone,
+    "contactType": "customer service",
+    "availableLanguage": "English"
+  }
+};
+
+const websiteSchema = {
+  "@type": "WebSite",
+  "name": siteConfig.name,
+  "url": siteConfig.url,
+};
+---
+
+<Layout 
+  title="Complete Facilities Maintenance Across New Zealand" 
+  description="Ethyl Merc Group is New Zealand's trusted partner for integrated facilities management. Plumbing, electrical, HVAC, carpentry and more from Auckland to Christchurch."
+>
+  <Schema items={[orgSchema, websiteSchema]} />
+  
+  <Hero 
+    title="Complete Facilities Maintenance, Done Right." 
+    subtitle="Ethyl Merc Group is New Zealand's trusted partner for integrated facilities management, delivering excellence from Auckland to Christchurch."
+    primaryCtaText="Request a Quote"
+    primaryCtaLink="/contact?type=quote"
+    secondaryCtaText="Explore Services"
+    secondaryCtaLink="/services"
+    showTrustIndicators={true}
+  />
+
+  {/* Services Grid */}
+  <section id="services" class="py-24 bg-neutral-light relative">
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-accent font-bold tracking-widest uppercase text-sm mb-2 block">What We Do</span>
+        <h2 class="text-3xl md:text-5xl font-heading font-bold text-primary mb-6">The Service Ecosystem</h2>
+        <p class="text-lg text-slate-600">
+          A fully integrated suite of facility maintenance solutions designed to keep your operations running seamlessly.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {sortedServices.map((service) => (
+          <ServiceCard 
+            title={service.data.title}
+            description={service.data.description}
+            href={`/services/${getSlug(service.id)}`}
+          />
+        ))}
+      </div>
+
+      <div class="text-center mt-12">
+        <Button href="/services" variant="outline" size="lg">View All Services</Button>
+      </div>
+    </div>
+  </section>
+
+  {/* Data-Driven Maintenance */}
+  <section class="py-24 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <span class="text-accent font-bold tracking-widest uppercase text-sm mb-2 block">Preventative Care</span>
+          <h2 class="text-3xl md:text-5xl font-heading font-bold text-primary mb-6">Data-Driven Longevity</h2>
+          <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+            Extend the lifespan of your assets with our scheduled maintenance programs. We use predictive data to catch issues before they become failures, saving you money and reducing downtime.
+          </p>
+          <div class="grid grid-cols-3 gap-6 mb-8">
+            <div class="text-center">
+              <div class="text-3xl font-heading font-bold text-accent">40%</div>
+              <div class="text-sm text-slate-500 mt-1">Cost Reduction</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-heading font-bold text-accent">60%</div>
+              <div class="text-sm text-slate-500 mt-1">Fewer Callouts</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-heading font-bold text-accent">5yr</div>
+              <div class="text-sm text-slate-500 mt-1">Extended Life</div>
+            </div>
+          </div>
+          <Button href="/services/preventative-maintenance" variant="accent">View Maintenance Plans</Button>
+        </div>
+        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-8 border border-slate-200 aspect-square flex items-center justify-center">
+          <div class="text-center text-slate-400">
+            <svg class="w-20 h-20 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            <span class="font-heading font-bold">Data Dashboard</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Emergency Response */}
+  <section class="py-24 bg-secondary text-white overflow-hidden relative">
+    <div class="absolute inset-0 bg-gradient-to-br from-secondary via-red-700 to-red-900 z-0"></div>
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl md:text-5xl font-heading font-bold mb-6">When Every Second Counts</h2>
+        <p class="text-lg text-red-100 mb-10 max-w-2xl mx-auto leading-relaxed">
+          Unexpected failures don't wait for business hours. Our rapid response teams are available nationwide to secure your facility and minimise downtime.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button href={`tel:${siteConfig.contact.phone}`} size="lg" variant="primary" class="bg-white text-secondary hover:bg-slate-100">
+            Call {siteConfig.contact.phone}
+          </Button>
+          <Button href="/services/emergency-response" size="lg" variant="outline" class="text-white border-white/30 hover:bg-white/10">
+            Learn More
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Areas We Serve */}
+  <section class="py-24 bg-neutral-light">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-accent font-bold tracking-widest uppercase text-sm mb-2 block">Coverage</span>
+        <h2 class="text-3xl md:text-5xl font-heading font-bold text-primary mb-6">Serving New Zealand Coast to Coast</h2>
+        <p class="text-lg text-slate-600">
+          From our headquarters in Auckland to regional hubs in Wellington and Christchurch, our network ensures rapid response and consistent quality.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        {areas.map((area) => (
+          <a href={`/areas/${getSlug(area.id)}`} class="group bg-white rounded-xl border border-slate-200 p-8 hover:shadow-xl hover:border-accent/30 transition-all duration-300">
+            <div class="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent group-hover:text-white transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-heading font-bold text-primary mb-2 group-hover:text-accent transition-colors">{area.data.title}</h3>
+            <p class="text-slate-600 text-sm mb-4">{area.data.description}</p>
+            <span class="text-accent text-sm font-bold uppercase tracking-wide">Explore Area →</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="text-center mt-12">
+        <Button href="/areas" variant="outline" size="lg">View All Areas</Button>
+      </div>
+    </div>
+  </section>
+
+  {/* Testimonials */}
+  <section class="py-24 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-accent font-bold tracking-widest uppercase text-sm mb-2 block">Testimonials</span>
+        <h2 class="text-3xl md:text-5xl font-heading font-bold text-primary mb-6">Client Success Stories</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        {[
+          { quote: "Ethyl Merc Group consistently delivers reliable and high-quality maintenance services that keep our facilities running smoothly. Their attention to detail is unmatched.", author: "Property Manager", company: "Auckland CBD" },
+          { quote: "Their team is professional, responsive, and always proactive in addressing our property needs. It's rare to find a partner who cares as much about our assets as we do.", author: "Facilities Director", company: "Wellington" },
+          { quote: "From emergency response to preventative maintenance, Ethyl Merc has transformed how we manage our campus infrastructure. A truly world-class service provider.", author: "Operations Manager", company: "Christchurch" },
+        ].map((testimonial) => (
+          <div class="bg-slate-50 p-8 rounded-xl border border-slate-200">
+            <div class="text-accent text-4xl font-serif mb-4">"</div>
+            <p class="text-slate-600 leading-relaxed mb-6">{testimonial.quote}</p>
+            <div class="border-t border-slate-200 pt-4">
+              <div class="font-heading font-bold text-primary">{testimonial.author}</div>
+              <div class="text-sm text-slate-500">{testimonial.company}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* CTA */}
+  <section class="py-24 bg-primary text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-primary via-primary to-slate-900 z-0"></div>
+    <div class="absolute right-0 top-0 h-full w-1/2 bg-white/5 skew-x-12 transform translate-x-20"></div>
+    <div class="container mx-auto px-4 relative z-10 text-center">
+      <h2 class="text-3xl md:text-5xl font-heading font-bold mb-6">Ready to Optimise Your Facility?</h2>
+      <p class="text-lg text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+        Partner with New Zealand's trusted facilities maintenance experts. From emergency repairs to full-scale preventative maintenance programs, we deliver excellence at every level.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button href="/contact?type=quote" size="lg" variant="accent" class="shadow-xl shadow-accent/20">Request a Quote</Button>
+        <Button href="/about" size="lg" variant="outline" class="text-white border-white/30 hover:bg-white/10 hover:border-white">About EMG</Button>
+      </div>
+    </div>
+  </section>
+</Layout>

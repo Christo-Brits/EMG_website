@@ -1,0 +1,73 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Button from "../components/ui/Button.astro";
+import PreQualWizard from "../components/react/PreQualWizard";
+import { Wrench, Droplet, Zap, Home } from "lucide-react";
+
+const title = "Residential Services";
+const description = "Professional tradespeople for your home. Plumbing, electrical, and maintenance you can trust.";
+---
+
+<Layout title={title} description={description}>
+  <Hero 
+    title="Trusted Trades for Your Home" 
+    subtitle="No more no-shows. Just professional, vetted tradespeople who turn up on time and do the job right."
+    image="/images/residential-hero.jpg"
+    primaryCtaText="Book a Job"
+    secondaryCtaText="Home Care Plans"
+    secondaryCtaLink="#plans"
+  />
+
+  <section class="py-20 container mx-auto px-4">
+     <div class="grid md:grid-cols-3 gap-8">
+        {[
+           { title: "Plumbing & Gas", icon: Droplet, desc: "Leaking taps, hot water cylinders, and gas fitting." },
+           { title: "Electrical", icon: Zap, desc: "Lighting upgrades, switchboard repairs, and EV chargers." },
+           { title: "General Maintenance", icon: Wrench, desc: "Door repairs, deck maintenance, and handyman tasks." }
+        ].map(item => (
+           <div class="text-center p-6 hover:bg-neutral-light rounded-xl transition-colors cursor-pointer">
+              <div class="w-16 h-16 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                 <item.icon className="w-8 h-8" />
+              </div>
+              <h3 class="font-bold text-xl mb-2">{item.title}</h3>
+              <p class="text-slate-600 mb-4">{item.desc}</p>
+              <span class="text-sm font-bold text-primary underline">Book Now</span>
+           </div>
+        ))}
+     </div>
+  </section>
+
+  <section id="estimate" class="py-20 bg-white border-t border-slate-100">
+    <div class="container mx-auto px-4">
+       <div class="text-center mb-12">
+          <h2 class="text-3xl font-heading font-bold text-primary mb-4">How much will it cost?</h2>
+          <p class="text-slate-600">Get an instant price range for your home repair.</p>
+       </div>
+       <PreQualWizard client:load initialServiceType="residential" />
+    </div>
+  </section>
+
+  <section id="plans" class="py-20 bg-slate-50 border-y border-slate-200">
+     <div class="container mx-auto px-4 max-w-4xl">
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden grid md:grid-cols-2">
+           <div class="p-10 flex flex-col justify-center">
+              <span class="text-accent font-bold uppercase tracking-widest text-sm mb-2">Coming Soon</span>
+              <h2 class="text-3xl font-heading font-bold text-primary mb-4">The EMG Home Care Plan</h2>
+              <p class="text-slate-600 mb-6">
+                 Forget about finding a tradie when things break. Subscribe to our Home Care plan and get regular maintenance to stop problems before they start.
+              </p>
+              <ul class="space-y-3 mb-8">
+                 <li class="flex items-center gap-3"><Home className="w-5 h-5 text-accent" /> Annual Gutter Clean</li>
+                 <li class="flex items-center gap-3"><Zap className="w-5 h-5 text-accent" /> Electrical Safety Check</li>
+                 <li class="flex items-center gap-3"><Droplet className="w-5 h-5 text-accent" /> Plumbing Inspection</li>
+              </ul>
+              <Button href="/contact?type=waitlist" variant="primary">Join Waitlist</Button>
+           </div>
+           <div class="bg-slate-200 h-64 md:h-auto bg-cover bg-center" style="background-image: url('/images/home-care.jpg')">
+              {/* Image placeholder */}
+           </div>
+        </div>
+     </div>
+  </section>
+</Layout>

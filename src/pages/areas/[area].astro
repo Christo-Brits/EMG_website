@@ -1,0 +1,152 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Hero from "../../components/Hero.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import ServiceCard from "../../components/ServiceCard.astro";
+import Schema from "../../components/Schema.astro";
+import GoogleMap from "../../components/GoogleMap.astro";
+import { siteConfig } from "../../config/site";
+import { getSlug } from "../../utils/slug";
+
+export async function getStaticPaths() {
+  const areas = await getCollection("areas");
+  return areas.map((area) => ({
+    params: { area: getSlug(area.id) },
+    props: { area },
+  }));
+}
+
+const { area } = Astro.props;
+const { Content } = await area.render();
+const areaSlug = getSlug(area.id);
+const services = await getCollection("services");
+const sortedServices = services.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+const areas = await getCollection("areas");
+const otherAreas = areas.filter(a => a.id !== area.id);
+
+const localBusinessSchema = {
+  "@type": "LocalBusiness",
+  "name": `${siteConfig.name} - ${area.data.title}`,
+  "url": `${siteConfig.url}/areas/${areaSlug}`,
+  "telephone": area.data.phone || siteConfig.contact.phone,
+  "email": siteConfig.contact.email,
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": area.data.title,
+    "addressCountry": "NZ"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": area.data.mapLat,
+    "longitude": area.data.mapLng
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": area.data.title
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Facilities Maintenance Services",
+    "itemListElement": sortedServices.map(service => ({
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": service.data.title,
+        "url": `${siteConfig.url}/areas/${areaSlug}/${getSlug(service.id)}`
+      }
+    }))
+  }
+};
+---
+
+<Layout 
+  title={area.data.metaTitle.replace(` | ${siteConfig.shortName}`, '').replace(` | ${siteConfig.name}`, '')} 
+  description={area.data.metaDescription}
+  image={area.data.heroImage}
+>
+  <Schema items={localBusinessSchema} />
+
+  <section class="bg-white border-b border-slate-100">
+    <div class="container mx-auto px-4">
+      <Breadcrumbs items={[
+        { label: "Home", href: "/" },
+        { label: "Areas We Serve", href: "/areas" },
+        { label: area.data.title }
+      ]} />
+    </div>
+  </section>
+
+  <Hero 
+    title={`Facilities Maintenance in ${area.data.title}`}
+    subtitle={`Your local commercial maintenance partner in ${area.data.title} and surrounding areas. All trades, one provider.`}
+    primaryCtaText="Get a Quote"
+    primaryCtaLink={`/contact?area=${areaSlug}`}
+    secondaryCtaText={`Call ${area.data.phone || siteConfig.contact.phone}`}
+    secondaryCtaLink={`tel:${area.data.phone || siteConfig.contact.phone}`}
+  />
+
+  <section class="py-16 container mx-auto px-4">
+    <div class="grid lg:grid-cols-3 gap-12">
+       <div class="lg:col-span-2">
+          <div class="prose prose-slate max-w-none mb-12">
+             <Content />
+          </div>
+          
+          <h2 class="text-2xl md:text-3xl font-heading font-bold text-primary mb-8">Services Available in {area.data.title}</h2>
+          <div class="grid md:grid-cols-2 gap-6">
+             {sortedServices.map(service => (
+                <ServiceCard 
+                   title={service.data.title}
+                   description={`Professional ${service.data.title.toLowerCase()} in ${area.data.title} and surrounding areas.`}
+                   href={`/areas/${areaSlug}/${getSlug(service.id)}`}
+                />
+             ))}
+          </div>
+       </div>
+       
+       <div class="space-y-8">
+          {/* Map */}
+          <GoogleMap lat={area.data.mapLat} lng={area.data.mapLng} title={area.data.title} />
+
+          {/* Neighborhoods */}
+          {area.data.neighborhoods && (
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+              <h3 class="font-heading font-bold text-lg mb-4 text-primary">Areas We Cover</h3>
+              <div class="flex flex-wrap gap-2">
+                {area.data.neighborhoods.map((n: string) => (
+                  <span class="px-3 py-1.5 bg-white text-slate-600 text-xs rounded-full border border-slate-200">{n}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Other Locations */}
+          <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+            <h3 class="font-heading font-bold text-lg mb-4 text-primary">Other Locations</h3>
+            <ul class="space-y-3">
+              {otherAreas.map(otherArea => (
+                <li>
+                  <a href={`/areas/${getSlug(otherArea.id)}`} class="flex items-center gap-2 text-sm text-slate-600 hover:text-accent transition-colors font-medium">
+                    <span class="text-accent">→</span> {otherArea.data.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact CTA */}
+          <div class="bg-primary text-white p-6 rounded-xl">
+             <h3 class="font-heading font-bold text-lg mb-2">Need help in {area.data.title}?</h3>
+             <p class="text-slate-300 text-sm mb-4">Our local team is ready to assist with any maintenance need.</p>
+             <a href={`tel:${area.data.phone || siteConfig.contact.phone}`} class="block w-full text-center px-6 py-3 bg-accent rounded-lg font-bold hover:bg-accent/90 transition-colors mb-3">
+               Call {area.data.phone || siteConfig.contact.phone}
+             </a>
+             <a href="/contact" class="block w-full text-center px-6 py-3 bg-white/10 border border-white/20 rounded-lg font-medium text-sm hover:bg-white/20 transition-colors">
+               Request a Quote
+             </a>
+          </div>
+       </div>
+    </div>
+  </section>
+</Layout>

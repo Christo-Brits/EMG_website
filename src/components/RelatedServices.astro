@@ -1,0 +1,36 @@
+---
+interface ServiceLink {
+  title: string;
+  href: string;
+  description?: string;
+}
+
+interface Props {
+  services: ServiceLink[];
+  heading?: string;
+}
+
+const { services, heading = "Related Services" } = Astro.props;
+---
+
+<div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+  <h3 class="font-heading font-bold text-lg mb-4 text-primary">{heading}</h3>
+  <ul class="space-y-3">
+    {services.map((service) => (
+      <li>
+        <a 
+          href={service.href} 
+          class="group flex items-start gap-3 text-sm hover:text-accent transition-colors"
+        >
+          <span class="text-accent font-bold mt-0.5 flex-shrink-0">→</span>
+          <div>
+            <span class="font-semibold group-hover:text-accent transition-colors">{service.title}</span>
+            {service.description && (
+              <p class="text-slate-500 text-xs mt-0.5">{service.description}</p>
+            )}
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>

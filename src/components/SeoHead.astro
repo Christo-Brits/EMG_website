@@ -1,0 +1,64 @@
+---
+import { SEO } from "astro-seo";
+import { siteConfig } from "../config/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  canonical?: string;
+}
+
+const { 
+  title, 
+  description = siteConfig.description, 
+  image = siteConfig.ogImage,
+  noindex = false,
+  canonical
+} = Astro.props;
+
+const makeTitle = title ? `${title} | ${siteConfig.shortName}` : siteConfig.name;
+const canonicalUrl = canonical || new URL(Astro.url.pathname, siteConfig.url).toString();
+---
+
+<SEO
+  title={makeTitle}
+  description={description}
+  canonical={canonicalUrl}
+  openGraph={{
+    basic: {
+      title: makeTitle,
+      type: "website",
+      image: image,
+      url: canonicalUrl,
+    },
+    optional: {
+      siteName: siteConfig.name,
+      locale: "en_NZ",
+      description: description,
+    }
+  }}
+  twitter={{
+    card: "summary_large_image",
+    title: makeTitle,
+    description: description,
+    image: image,
+  }}
+  noindex={noindex}
+  charset="UTF-8"
+  extend={{
+    link: [
+      { rel: "icon", href: "/favicon.ico" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&family=Oswald:wght@500;600&family=Roboto:wght@400;500&display=swap" }
+    ],
+    meta: [
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "generator", content: Astro.generator },
+      { name: "geo.region", content: "NZ" },
+      { name: "geo.placename", content: "New Zealand" },
+    ],
+  }}
+/>

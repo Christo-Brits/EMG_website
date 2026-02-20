@@ -1,0 +1,117 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Button from "../components/ui/Button.astro";
+import PreQualWizard from "../components/react/PreQualWizard";
+import { ClipboardCheck, Zap, Cog, Clock, CalendarClock } from "lucide-react";
+
+const title = "Commercial Property Maintenance";
+const description = "Complete facilities management and trade services for commercial portfolios.";
+
+const maintenanceServices = [
+  {
+    title: "Planned Preventative Maintenance (PPM)",
+    description: "Scheduled servicing of HVAC, plumbing, and electrical systems to prevent costly failures.",
+    href: "/services/facilities-maintenance",
+    icon: CalendarClock // Wait, I need to import icons.
+  },
+  // ... better to use placeholders if I don't import them all.
+];
+
+// I will just simple icons for now.
+---
+
+<Layout title={title} description={description}>
+  <Hero 
+    title="Commercial Maintenance Made Simple" 
+    subtitle="One partner for all your property needs. From reactive repairs to full compliance management."
+    image="/images/commercial-hero.jpg"
+    primaryCtaText="Get Maintenance Quote"
+    secondaryCtaText="View Service Plans"
+    secondaryCtaLink="#plans"
+  />
+
+  <section class="py-20 container mx-auto px-4">
+     <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl font-heading font-bold text-primary mb-6">Built for Property Managers</h2>
+        <p class="text-slate-600">
+           We understand the pressure of tenant demands and compliance audits. Our systems are designed to give you visibility and peace of mind.
+        </p>
+     </div>
+
+     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {[
+           { title: "Reactive Repairs", icon: Zap, desc: "24/7 emergency response for leaks, power outages, and security issues." },
+           { title: "Compliance", icon: ClipboardCheck, desc: "BWOF, IQP inspections, and automated reporting." },
+           { title: "Asset Management", icon: Cog, desc: "Lifecycle tracking and capex planning for plant and equipment." },
+           { title: "SLA Guarantees", icon: Clock, desc: "Guaranteed response times for critical faults." }
+        ].map(item => (
+           <div class="p-6 bg-white border border-slate-200 rounded-xl hover:shadow-lg transition-all">
+              <div class="w-12 h-12 bg-neutral-light rounded-lg flex items-center justify-center mb-4 text-primary">
+                 <item.icon className="w-6 h-6" />
+              </div>
+              <h3 class="font-bold text-lg mb-2">{item.title}</h3>
+              <p class="text-sm text-slate-600">{item.desc}</p>
+           </div>
+        ))}
+     </div>
+  </section>
+
+  <section id="estimate" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+       <div class="text-center mb-12">
+          <h2 class="text-3xl font-heading font-bold text-primary mb-4">Get a Commercial Maintenance Quote</h2>
+          <p class="text-slate-600">Quick estimate for your property portfolio.</p>
+       </div>
+       <PreQualWizard client:load initialServiceType="commercial" />
+    </div>
+  </section>
+
+  <section id="plans" class="py-20 bg-neutral-light">
+     <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-heading font-bold text-center mb-12">Maintenance Subscriptions</h2>
+        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+           {/* Basic Plan */}
+           <div class="bg-white p-8 rounded-2xl border border-slate-200">
+              <h3 class="font-bold text-xl mb-2">Ad-Hoc</h3>
+              <p class="text-sm text-slate-500 mb-6">Pay as you go for smaller portfolios.</p>
+              <div class="text-3xl font-bold mb-6">$0<span class="text-sm font-normal text-slate-500">/mo</span></div>
+              <ul class="space-y-3 text-sm mb-8">
+                 <li class="flex gap-2"><span class="text-green-500">✓</span> Standard Rates</li>
+                 <li class="flex gap-2"><span class="text-green-500">✓</span> Online Portal Access</li>
+                 <li class="flex gap-2"><span class="text-green-500">✓</span> 4hr Response Target</li>
+              </ul>
+              <Button href="/contact" variant="outline" class="w-full">Sign Up</Button>
+           </div>
+
+           {/* Professional Plan */}
+           <div class="bg-primary text-white p-8 rounded-2xl border border-primary relative transform md:-translate-y-4 shadow-xl">
+              <div class="absolute top-0 right-0 bg-accent text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">POPULAR</div>
+              <h3 class="font-bold text-xl mb-2">Professional</h3>
+              <p class="text-sm text-slate-300 mb-6">For commercial buildings & detailed compliance.</p>
+              <div class="text-3xl font-bold mb-6">$Custom<span class="text-sm font-normal text-slate-300">/mo</span></div>
+              <ul class="space-y-3 text-sm mb-8">
+                 <li class="flex gap-2"><span class="text-accent">✓</span> Discounted Rates</li>
+                 <li class="flex gap-2"><span class="text-accent">✓</span> Priority 2hr Response</li>
+                 <li class="flex gap-2"><span class="text-accent">✓</span> Monthly Compliance Reporting</li>
+                 <li class="flex gap-2"><span class="text-accent">✓</span> Dedicated Account Manager</li>
+              </ul>
+              <Button href="/contact" variant="accent" class="w-full">Get a Quote</Button>
+           </div>
+
+           {/* Enterprise Plan */}
+           <div class="bg-white p-8 rounded-2xl border border-slate-200">
+              <h3 class="font-bold text-xl mb-2">Enterprise</h3>
+              <p class="text-sm text-slate-500 mb-6">National multi-site portfolios.</p>
+              <div class="text-xl font-bold mb-6 text-slate-700">Volume Pricing</div>
+              <ul class="space-y-3 text-sm mb-8">
+                 <li class="flex gap-2"><span class="text-green-500">✓</span> National Coverage</li>
+                 <li class="flex gap-2"><span class="text-green-500">✓</span> Custom SLA Integration</li>
+                 <li class="flex gap-2"><span class="text-green-500">✓</span> API Integration</li>
+              </ul>
+              <Button href="/contact" variant="outline" class="w-full">Contact Sales</Button>
+           </div>
+        </div>
+     </div>
+  </section>
+</Layout>

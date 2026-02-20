@@ -1,0 +1,35 @@
+---
+interface Props {
+  href?: string;
+  variant?: "primary" | "secondary" | "accent" | "outline" | "ghost" | "danger";
+  size?: "sm" | "md" | "lg";
+  class?: string;
+  [x: string]: any;
+}
+
+const { href, variant = "primary", size = "md", class: className, ...rest } = Astro.props;
+
+const baseStyles = "inline-flex items-center justify-center rounded-md font-heading font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 cursor-pointer";
+
+const variants = {
+  primary: "bg-accent text-white hover:bg-accent/90 shadow-sm", // Electric Blue
+  secondary: "bg-primary text-white hover:bg-primary/90 shadow-sm", // Dilithium (Navy)
+  accent: "bg-secondary text-white hover:bg-secondary/90 shadow-sm", // Red (using css var secondary)
+  danger: "bg-red-600 text-white hover:bg-red-700 shadow-sm",
+  outline: "border border-slate-200 bg-transparent hover:bg-slate-50 text-slate-900",
+  ghost: "hover:bg-slate-100 hover:text-slate-900 text-slate-600",
+};
+
+const sizes = {
+  sm: "h-9 px-3 text-sm",
+  md: "h-11 px-6 py-2", // Slightly larger for better touch targets
+  lg: "h-12 px-8 text-lg",
+};
+
+const styles = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className || ""}`;
+const Tag = href ? "a" : "button";
+---
+
+<Tag href={href} class={styles} {...rest}>
+  <slot />
+</Tag>

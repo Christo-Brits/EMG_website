@@ -1,0 +1,31 @@
+---
+import SeoHead from "../components/SeoHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  canonical?: string;
+}
+
+const { title, description, image, noindex, canonical } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <SeoHead title={title} description={description} image={image} noindex={noindex} canonical={canonical} />
+    <slot name="head" />
+  </head>
+  <body class="bg-white text-slate-800 font-body antialiased min-h-screen flex flex-col">
+    <Header />
+    <main class="flex-1 w-full">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,25 @@
+---
+interface Props {
+  lat: number;
+  lng: number;
+  title: string;
+  zoom?: number;
+}
+
+const { lat, lng, title, zoom = 13 } = Astro.props;
+const mapSrc = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${lat},${lng}&zoom=${zoom}`;
+const staticMapSrc = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=600x300&maptype=roadmap&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8`;
+---
+
+<div class="bg-slate-100 rounded-xl overflow-hidden border border-slate-200 aspect-video relative group">
+  <iframe
+    src={`https://www.google.com/maps?q=${lat},${lng}&z=${zoom}&output=embed`}
+    width="100%"
+    height="100%"
+    style="border:0;"
+    allowfullscreen=""
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    title={`Google Map showing ${title} service area`}
+  ></iframe>
+</div>

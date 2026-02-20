@@ -1,0 +1,84 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import ServiceCard from "../../components/ServiceCard.astro";
+import Schema from "../../components/Schema.astro";
+import { getCollection } from "astro:content";
+import { siteConfig } from "../../config/site";
+import { getSlug } from "../../utils/slug";
+
+const services = await getCollection("services");
+const sortedServices = services.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+
+const schema = {
+  "@type": "ItemList",
+  "name": "Facilities Maintenance Services",
+  "description": "Complete range of commercial facilities maintenance services provided by Ethyl Merc Group across New Zealand.",
+  "numberOfItems": sortedServices.length,
+  "itemListElement": sortedServices.map((service, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "item": {
+      "@type": "Service",
+      "name": service.data.title,
+      "description": service.data.description,
+      "url": `${siteConfig.url}/services/${getSlug(service.id)}`,
+      "provider": {
+        "@type": "Organization",
+        "name": siteConfig.name
+      }
+    }
+  }))
+};
+---
+
+<Layout 
+  title="Our Services | Facilities Maintenance Solutions NZ"
+  description="Complete facilities maintenance services across New Zealand. Plumbing, electrical, HVAC, carpentry, painting, civil works, preventative maintenance, and emergency response."
+>
+  <Schema items={schema} />
+
+  <section class="py-8 bg-white border-b border-slate-100">
+    <div class="container mx-auto px-4">
+      <Breadcrumbs items={[
+        { label: "Home", href: "/" },
+        { label: "Services" }
+      ]} />
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mb-16">
+        <span class="text-accent font-bold tracking-widest uppercase text-sm mb-2 block">Our Services</span>
+        <h1 class="text-4xl md:text-5xl font-heading font-bold text-primary mb-6">Facilities Maintenance Solutions</h1>
+        <p class="text-lg text-slate-600 leading-relaxed">
+          Ethyl Merc Group provides a fully integrated suite of commercial facilities maintenance services across New Zealand. From reactive repairs to proactive maintenance programs, our certified technicians handle every trade under one roof.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {sortedServices.map((service) => (
+          <ServiceCard 
+            title={service.data.title}
+            description={service.data.description}
+            href={`/services/${getSlug(service.id)}`}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* Areas availability */}
+  <section class="py-16 bg-neutral-light">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-primary mb-4">Available Nationwide</h2>
+      <p class="text-slate-600 mb-8 max-w-2xl mx-auto">All services are available across our three regional hubs. Select an area to see location-specific service details.</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/areas/auckland" class="px-6 py-3 bg-white rounded-lg border border-slate-200 hover:border-accent hover:shadow-lg transition-all font-heading font-bold text-primary hover:text-accent">Auckland</a>
+        <a href="/areas/wellington" class="px-6 py-3 bg-white rounded-lg border border-slate-200 hover:border-accent hover:shadow-lg transition-all font-heading font-bold text-primary hover:text-accent">Wellington</a>
+        <a href="/areas/christchurch" class="px-6 py-3 bg-white rounded-lg border border-slate-200 hover:border-accent hover:shadow-lg transition-all font-heading font-bold text-primary hover:text-accent">Christchurch</a>
+      </div>
+    </div>
+  </section>
+</Layout>

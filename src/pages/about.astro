@@ -1,0 +1,76 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Button from "../components/ui/Button.astro";
+
+const title = "About Ethyl Merc Group";
+const description = "We are a nationwide trade collective bridging the gap between independent craftsmanship and corporate compliance.";
+---
+
+<Layout title={title} description={description}>
+  <Hero 
+    title="The Evolution of Trade Services" 
+    subtitle="Bridging the gap between the agility of independent trades and the compliance of large corporates."
+    image="/images/about-hero.jpg"
+    primaryCtaText="Join the Collective"
+    primaryCtaLink="/partners"
+    secondaryCtaText="Contact Us"
+    secondaryCtaLink="/contact"
+  />
+  
+  <section class="py-20 container mx-auto px-4">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+       <div>
+          <h2 class="text-3xl font-heading font-bold text-primary mb-6">Our Mission</h2>
+          <div class="prose prose-lg text-slate-600">
+             <p>
+               Ethyl Merc Group was founded to solve a critical problem in the New Zealand construction and maintenance industry: 
+               <strong>Scalability without compromise.</strong>
+             </p>
+             <p>
+               For too long, property managers had to choose between the personalized service of a "one-man band" 
+               and the administrative reliability of a large, expensive corporate firm.
+             </p>
+             <p>
+               We created a third option. A collective of vetted, independent trade businesses operating under a 
+               single, rigorous administrative umbrella. This model delivers the best of both worlds: 
+               local ownership with corporate-grade accountability.
+             </p>
+          </div>
+       </div>
+       <div class="bg-neutral-light p-8 rounded-2xl border border-slate-200">
+          <h3 class="font-heading font-bold text-xl mb-6">Why We Are Different</h3>
+          <ul class="space-y-4">
+             {[
+               "Single point of contact for multi-trade projects",
+               "Standardized health & safety reporting",
+               "Real-time job tracking and updates",
+               "Nationwide coverage, local execution"
+             ].map(item => (
+                <li class="flex items-start gap-3">
+                   <div class="w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center flex-shrink-0 mt-1">✓</div>
+                   <span class="font-medium text-slate-700">{item}</span>
+                </li>
+             ))}
+          </ul>
+       </div>
+    </div>
+  </section>
+
+  <section class="py-20 bg-primary text-white">
+     <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-heading font-bold mb-12">Leadership & Vision</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+           {/* Placeholder for Team Cards */}
+           {[1, 2, 3].map((i) => (
+              <div class="bg-white/5 p-6 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+                 <div class="w-24 h-24 bg-white/20 rounded-full mx-auto mb-4"></div>
+                 <h3 class="font-heading font-bold text-lg">Partner Name</h3>
+                 <p class="text-accent text-sm uppercase tracking-wider font-bold mb-4">Role / Title</p>
+                 <p class="text-slate-300 text-sm">Brief bio describing their background in the trade industry and vision for the collective.</p>
+              </div>
+           ))}
+        </div>
+     </div>
+  </section>
+</Layout>

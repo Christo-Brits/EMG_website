@@ -1,0 +1,155 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Hero from "../../components/Hero.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Button from "../../components/ui/Button.astro";
+import Schema from "../../components/Schema.astro";
+import RelatedServices from "../../components/RelatedServices.astro";
+import { siteConfig } from "../../config/site";
+import { getSlug } from "../../utils/slug";
+
+export async function getStaticPaths() {
+  const services = await getCollection("services");
+  return services.map((service) => ({
+    params: { slug: getSlug(service.id) },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+const { Content } = await service.render();
+const slug = getSlug(service.id);
+
+// Get all services for related services links
+const allServices = await getCollection("services");
+const areas = await getCollection("areas");
+
+const relatedServiceLinks = allServices
+  .filter(s => service.data.relatedServices?.includes(getSlug(s.id)))
+  .map(s => ({
+    title: s.data.title,
+    href: `/services/${getSlug(s.id)}`,
+    description: s.data.description.substring(0, 80) + "...",
+  }));
+
+// Area-service links for "Available in" section
+const areaServiceLinks = areas.map(area => ({
+  title: `${service.data.title} in ${area.data.title}`,
+  href: `/areas/${getSlug(area.id)}/${slug}`,
+}));
+
+const serviceSchema = {
+  "@type": "Service",
+  "name": service.data.title,
+  "description": service.data.description,
+  "url": `${siteConfig.url}/services/${slug}`,
+  "provider": {
+    "@type": "Organization",
+    "name": siteConfig.name,
+    "url": siteConfig.url,
+    "telephone": siteConfig.contact.phone,
+  },
+  "areaServed": areas.map(area => ({
+    "@type": "City",
+    "name": area.data.title,
+  })),
+  "serviceType": service.data.title,
+};
+
+const localBusinessSchema = {
+  "@type": "LocalBusiness",
+  "name": siteConfig.name,
+  "url": siteConfig.url,
+  "telephone": siteConfig.contact.phone,
+  "email": siteConfig.contact.email,
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Auckland",
+    "addressRegion": "Auckland",
+    "addressCountry": "NZ"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Facilities Maintenance Services",
+    "itemListElement": [{
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": service.data.title,
+        "description": service.data.description,
+      }
+    }]
+  }
+};
+---
+
+<Layout 
+  title={service.data.metaTitle.replace(` | ${siteConfig.shortName}`, '').replace(` | ${siteConfig.name}`, '')} 
+  description={service.data.metaDescription}
+  image={service.data.heroImage}
+>
+  <Schema items={[serviceSchema, localBusinessSchema]} />
+
+  <section class="bg-white border-b border-slate-100">
+    <div class="container mx-auto px-4">
+      <Breadcrumbs items={[
+        { label: "Home", href: "/" },
+        { label: "Services", href: "/services" },
+        { label: service.data.title }
+      ]} />
+    </div>
+  </section>
+
+  <Hero 
+    title={service.data.title}
+    subtitle={service.data.description}
+    primaryCtaText="Get a Quote"
+    primaryCtaLink={`/contact?service=${slug}`}
+    secondaryCtaText="Call Us Now"
+    secondaryCtaLink={`tel:${siteConfig.contact.phone}`}
+  />
+
+  <section class="py-16 container mx-auto px-4">
+    <div class="grid lg:grid-cols-3 gap-12">
+       <div class="lg:col-span-2 prose prose-slate max-w-none">
+          <Content />
+       </div>
+       
+       <div class="space-y-8">
+          {/* Key Features */}
+          <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+             <h3 class="font-heading font-bold text-lg mb-4 text-primary">Key Features</h3>
+             <ul class="space-y-3">
+                {service.data.features?.map((feature: string) => (
+                   <li class="flex items-start text-sm">
+                      <span class="mr-2 text-accent font-bold mt-0.5 flex-shrink-0">✓</span>
+                      {feature}
+                   </li>
+                ))}
+             </ul>
+          </div>
+
+          {/* Available in areas */}
+          <RelatedServices services={areaServiceLinks} heading="Available In" />
+
+          {/* Related Services */}
+          {relatedServiceLinks.length > 0 && (
+            <RelatedServices services={relatedServiceLinks} heading="Related Services" />
+          )}
+
+          {/* CTA Sidebar */}
+          <div class="bg-primary text-white p-6 rounded-xl">
+             <h3 class="font-heading font-bold text-lg mb-2">Need this service?</h3>
+             <p class="text-slate-300 text-sm mb-6">Contact our team for a rapid response or project estimate.</p>
+             <Button href="/contact" class="w-full bg-white text-primary hover:bg-slate-100">Contact Us</Button>
+             <div class="mt-4 text-center">
+               <a href={`tel:${siteConfig.contact.phone}`} class="text-accent text-sm font-bold hover:text-white transition-colors">
+                 Or call {siteConfig.contact.phone}
+               </a>
+             </div>
+          </div>
+       </div>
+    </div>
+  </section>
+</Layout>

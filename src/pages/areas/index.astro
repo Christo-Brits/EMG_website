@@ -1,0 +1,100 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Schema from "../../components/Schema.astro";
+import { getCollection } from "astro:content";
+import { siteConfig } from "../../config/site";
+import { getSlug } from "../../utils/slug";
+
+const areas = await getCollection("areas");
+const services = await getCollection("services");
+const sortedServices = services.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+
+const schema = {
+  "@type": "ItemList",
+  "name": "Areas We Serve",
+  "description": "Ethyl Merc Group provides facilities maintenance services across New Zealand.",
+  "numberOfItems": areas.length,
+  "itemListElement": areas.map((area, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "item": {
+      "@type": "Place",
+      "name": area.data.title,
+      "url": `${siteConfig.url}/areas/${getSlug(area.id)}`,
+    }
+  }))
+};
+---
+
+<Layout 
+  title="Areas We Serve | Nationwide Facilities Maintenance"
+  description="Ethyl Merc Group provides facilities maintenance across Auckland, Wellington, and Christchurch. Local teams, national standards. Find services in your area."
+>
+  <Schema items={schema} />
+
+  <section class="py-8 bg-white border-b border-slate-100">
+    <div class="container mx-auto px-4">
+      <Breadcrumbs items={[
+        { label: "Home", href: "/" },
+        { label: "Areas We Serve" }
+      ]} />
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mb-16">
+        <span class="text-accent font-bold tracking-widest uppercase text-sm mb-2 block">Coverage</span>
+        <h1 class="text-4xl md:text-5xl font-heading font-bold text-primary mb-6">Areas We Serve</h1>
+        <p class="text-lg text-slate-600 leading-relaxed">
+          Ethyl Merc Group delivers integrated facilities maintenance solutions across New Zealand's major centres. Our regional hubs in Auckland, Wellington, and Christchurch ensure rapid response and locally optimised service delivery.
+        </p>
+      </div>
+
+      {areas.map((area) => (
+        <div class="mb-16 last:mb-0">
+          <div class="bg-slate-50 rounded-2xl border border-slate-200 p-8 lg:p-12">
+            <div class="grid lg:grid-cols-2 gap-8 items-start">
+              <div>
+                <h2 class="text-3xl font-heading font-bold text-primary mb-4">
+                  <a href={`/areas/${getSlug(area.id)}`} class="hover:text-accent transition-colors">{area.data.title}</a>
+                </h2>
+                <p class="text-slate-600 mb-6 leading-relaxed">{area.data.description}</p>
+                
+                {area.data.neighborhoods && (
+                  <div class="mb-6">
+                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wide mb-3">Suburbs & Districts</h3>
+                    <div class="flex flex-wrap gap-2">
+                      {area.data.neighborhoods.map((n: string) => (
+                        <span class="px-3 py-1 bg-white text-slate-600 text-xs rounded-full border border-slate-200">{n}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <a href={`/areas/${getSlug(area.id)}`} class="inline-flex items-center text-accent font-bold text-sm uppercase tracking-wide hover:underline">
+                  View {area.data.title} Services →
+                </a>
+              </div>
+              
+              <div>
+                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wide mb-3">Services in {area.data.title}</h3>
+                <div class="grid grid-cols-2 gap-2">
+                  {sortedServices.map((service) => (
+                    <a 
+                      href={`/areas/${getSlug(area.id)}/${getSlug(service.id)}`} 
+                      class="px-4 py-3 bg-white rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:border-accent hover:text-accent transition-colors"
+                    >
+                      {service.data.title}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>
