@@ -27,5 +27,17 @@ const { title, description, image, noindex, canonical } = Astro.props;
       <slot />
     </main>
     <Footer />
+    {/* Hidden forms for Netlify to detect JS-submitted forms at build time */}
+    <form name="prequal-estimate" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="prequal-estimate" />
+      <input name="bot-field" />
+      <input name="service-type" />
+      <input name="urgency" />
+      <input name="description" />
+      <input name="name" />
+      <input name="email" />
+      <input name="phone" />
+      <input name="address" />
+    </form>
   </body>
 </html>

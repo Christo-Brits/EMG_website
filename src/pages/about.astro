@@ -60,16 +60,62 @@ const description = "We are a nationwide trade collective bridging the gap betwe
   <section class="py-20 bg-primary text-white">
      <div class="container mx-auto px-4 text-center">
         <h2 class="text-3xl font-heading font-bold mb-12">Leadership & Vision</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-           {/* Placeholder for Team Cards */}
-           {[1, 2, 3].map((i) => (
-              <div class="bg-white/5 p-6 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                 <div class="w-24 h-24 bg-white/20 rounded-full mx-auto mb-4"></div>
-                 <h3 class="font-heading font-bold text-lg">Partner Name</h3>
-                 <p class="text-accent text-sm uppercase tracking-wider font-bold mb-4">Role / Title</p>
-                 <p class="text-slate-300 text-sm">Brief bio describing their background in the trade industry and vision for the collective.</p>
+        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+
+           {/* Christo Brits */}
+           <div class="bg-white/5 p-8 rounded-xl border border-white/10 hover:bg-white/10 transition-colors text-left">
+              <div class="flex items-center gap-4 mb-6">
+                 <img
+                    src="/images/christo-brits.jpg"
+                    alt="Christo Brits - Founder & Director, Ethyl Merc Group"
+                    class="w-20 h-20 rounded-full object-cover border-2 border-accent flex-shrink-0"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+                 />
+                 <div class="w-20 h-20 bg-white/20 rounded-full flex-shrink-0 items-center justify-center text-2xl font-bold hidden">CB</div>
+                 <div>
+                    <h3 class="font-heading font-bold text-xl">Christo Brits</h3>
+                    <p class="text-accent text-sm uppercase tracking-wider font-bold">Founder & Director</p>
+                 </div>
               </div>
-           ))}
+              <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                 With over 20 years of industry experience, Christo specialises in delivering high-quality facilities maintenance solutions for industrial, commercial, and residential clients. As former Director of CETS Ltd, he successfully led 24 substantial projects spanning roadworks, earthworks, stormwater drainage, concrete structures, and civil works.
+              </p>
+              <p class="text-slate-300 text-sm leading-relaxed">
+                 As Founder of Infinite Build Solutions Ltd, he brings that expertise to comprehensive reactive and preventative maintenance across South Auckland — built on clear communication, integrity, and reliability.
+              </p>
+              <a href="https://www.linkedin.com/in/christobrits" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-6 text-accent text-sm font-bold hover:text-white transition-colors">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                 Connect on LinkedIn
+              </a>
+           </div>
+
+           {/* Andre Erasmus */}
+           <div class="bg-white/5 p-8 rounded-xl border border-white/10 hover:bg-white/10 transition-colors text-left">
+              <div class="flex items-center gap-4 mb-6">
+                 <img
+                    src="/images/andre-erasmus.jpg"
+                    alt="Andre Erasmus - Founder & Director, Ethyl Merc Group"
+                    class="w-20 h-20 rounded-full object-cover border-2 border-accent flex-shrink-0"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+                 />
+                 <div class="w-20 h-20 bg-white/20 rounded-full flex-shrink-0 items-center justify-center text-2xl font-bold hidden">AE</div>
+                 <div>
+                    <h3 class="font-heading font-bold text-xl">Andre Erasmus</h3>
+                    <p class="text-accent text-sm uppercase tracking-wider font-bold">Founder & Director</p>
+                 </div>
+              </div>
+              <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                 Andre brings extensive leadership experience in facilities management, having served as General Manager of Tomahawk Facilities Limited — a well-established Auckland-based FM company servicing a wide range of local and national businesses.
+              </p>
+              <p class="text-slate-300 text-sm leading-relaxed">
+                 With over 15 years in the field, Andre's expertise spans everything from residential jobs to large-scale commercial projects, with a strong focus on project organisation, quality workmanship, and outstanding client satisfaction.
+              </p>
+              <a href="https://www.linkedin.com/in/andre-erasmus-67733a225" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-6 text-accent text-sm font-bold hover:text-white transition-colors">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                 Connect on LinkedIn
+              </a>
+           </div>
+
         </div>
      </div>
   </section>

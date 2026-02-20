@@ -22,6 +22,16 @@ const {
   secondaryCtaLink = "#services",
   showTrustIndicators = false
 } = Astro.props;
+
+const partners = [
+  { name: "Downer", logo: "/images/logo-downer.png" },
+  { name: "New Zealand Steel", logo: "/images/logo-nzsteel.png" },
+  { name: "New World", logo: "/images/logo-newworld.png" },
+  { name: "Due Drop Events Centre", logo: "/images/logo-duedrop.png" },
+  { name: "Vector Wero", logo: "/images/logo-vectorwero.png" },
+  { name: "Ministry of Justice", logo: "/images/logo-moj.png" },
+  { name: "Corrections", logo: "/images/logo-corrections.png" },
+];
 ---
 
 <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-primary pt-16">
@@ -62,12 +72,20 @@ const {
       </div>
 
       {showTrustIndicators && (
-        <div class="mt-12 pt-8 border-t border-white/10 flex flex-wrap gap-8 items-center opacity-70">
-           <span class="text-xs uppercase tracking-widest text-slate-400 font-bold">Trusted By</span>
-           {/* Placeholders for logos */}
-           <div class="h-6 w-24 bg-white/20 rounded"></div>
-           <div class="h-6 w-24 bg-white/20 rounded"></div>
-           <div class="h-6 w-24 bg-white/20 rounded"></div>
+        <div class="mt-12 pt-8 border-t border-white/10">
+          <span class="text-xs uppercase tracking-widest text-slate-400 font-bold block mb-6">Trusted By</span>
+          <div class="flex flex-wrap gap-6 items-center">
+            {partners.map((partner) => (
+              <div class="h-8 flex items-center">
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  class="h-8 w-auto object-contain brightness-0 invert opacity-70 hover:opacity-100 transition-opacity"
+                  title={partner.name}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

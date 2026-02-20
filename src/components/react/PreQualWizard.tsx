@@ -68,8 +68,24 @@ export default function PreQualWizard({ initialServiceType }: PreQualWizardProps
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
-    const handleSubmit = () => {
-        console.log('Form Submitted:', formData);
+    const handleSubmit = async () => {
+        const body = new URLSearchParams({
+            'form-name': 'prequal-estimate',
+            'service-type': formData.serviceType,
+            'urgency': formData.urgency,
+            'description': formData.description,
+            'name': formData.name,
+            'email': formData.email,
+            'phone': formData.phone,
+            'address': formData.address,
+        }).toString();
+
+        await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body,
+        });
+
         setIsSubmitted(true);
     };
 
@@ -101,8 +117,7 @@ export default function PreQualWizard({ initialServiceType }: PreQualWizardProps
                 </div>
 
                 <p className="text-sm text-slate-500 mb-6">
-                    We have sent a copy of this estimate to <strong>{formData.email}</strong>.
-                    One of our {formData.serviceType} specialists will contact you shortly to confirm details.
+                    One of our {formData.serviceType} specialists will contact you shortly to confirm details and arrange a site visit.
                 </p>
 
                 <button onClick={() => window.location.href = '/'} className="w-full py-3 bg-primary text-white rounded-lg font-bold hover:bg-slate-800 transition-colors">

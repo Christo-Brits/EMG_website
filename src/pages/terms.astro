@@ -1,0 +1,97 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { siteConfig } from "../config/site";
+
+const title = "Terms of Service";
+const description = "Terms of Service for Ethyl Merc Group — the terms that govern use of our website and services.";
+const lastUpdated = "February 2025";
+---
+
+<Layout title={title} description={description}>
+  <section class="bg-primary text-white py-20">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-5xl font-heading font-bold mb-4">Terms of Service</h1>
+      <p class="text-slate-300">Last updated: {lastUpdated}</p>
+    </div>
+  </section>
+
+  <section class="py-16 container mx-auto px-4 max-w-3xl">
+    <div class="prose prose-slate max-w-none space-y-10 text-slate-700 leading-relaxed">
+
+      <div>
+        <h2 class="text-2xl font-heading font-bold text-primary mb-4">1. Acceptance of Terms</h2>
+        <p>By accessing or using the Ethyl Merc Group website at <strong>{siteConfig.url}</strong> ("Site"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use the Site.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-heading font-bold text-primary mb-4">2. About Us</h2>
+        <p>Ethyl Merc Group Limited ("EMG") is a New Zealand company providing facilities management, trade services, and property maintenance. Our registered office is in Auckland, New Zealand.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-heading font-bold text-primary mb-4">3. Use of the Website</h2>
+        <p>You agree to use this Site only for lawful purposes and in a manner that does not infringe the rights of others. You must not:</p>
+        <ul class="list-disc pl-6 mt-3 space-y-2">
+          <li>Use the Site in any way that breaches applicable local, national, or international law</li>
+          <li>Transmit unsolicited commercial communications</li>
+          <li>Attempt to gain unauthorised access to any part of the Site or its related systems</li>
+          <li>Use automated tools to scrape, crawl, or extract data from the Site without our express written consent</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-heading font-bold text-primary mb-4">4. Quotes and Service Estimates</h2>
+        <p>Any quotes or estimates generated through our website (including via the Pre-Qualification Wizard) are indicative only and do not constitute a binding contract or offer. All work is subject to a formal written agreement signed by an authorised EMG representative.</p>
+        <p class="mt-4">Actual pricing may vary depending on site conditions, scope changes, or other factors identified during inspection.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-heading font-bold text-primary mb-4">5. Intellectual Property</h2>
+        <p>All content on this Site — including text, graphics, logos, images, and software — is the property of Ethyl Merc Group Limited or its content suppliers and is protected by New Zealand and international copyright laws. You may not reproduce, distribute, or create derivative works from any content without our express written permission.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-heading font-bold text-primary mb-4">6. Third-Party Links</h2>
+        <p>Our Site may contain links to third-party websites. These links are provided for your convenience only. EMG has no control over the content of those sites and accepts no responsibility for them or for any loss or damage that may arise from your use of them.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-heading font-bold text-primary mb-4">7. Disclaimer of Warranties</h2>
+        <p>The Site and its content are provided on an "as is" basis without any warranties of any kind, either express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement. We do not warrant that the Site will be error-free or uninterrupted.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-heading font-bold text-primary mb-4">8. Limitation of Liability</h2>
+        <p>To the fullest extent permitted by law, Ethyl Merc Group Limited shall not be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of the Site or our services. Our total liability shall not exceed the amount paid by you for the specific service giving rise to the claim.</p>
+        <p class="mt-4">Nothing in these Terms excludes liability that cannot be excluded under the New Zealand Consumer Guarantees Act 1993 or Fair Trading Act 1986.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-heading font-bold text-primary mb-4">9. Trade Partner Applications</h2>
+        <p>Submission of a partner application via our Site does not guarantee acceptance into the EMG trade collective. All applications are subject to vetting, credential verification, and approval at our sole discretion. We reserve the right to decline any application without providing reasons.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-heading font-bold text-primary mb-4">10. Governing Law</h2>
+        <p>These Terms are governed by the laws of New Zealand. Any disputes arising in connection with these Terms or the Site shall be subject to the exclusive jurisdiction of the New Zealand courts.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-heading font-bold text-primary mb-4">11. Changes to These Terms</h2>
+        <p>We reserve the right to amend these Terms at any time. Updated Terms will be posted on this page with a revised date. Your continued use of the Site after changes are posted constitutes your acceptance of the revised Terms.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-heading font-bold text-primary mb-4">12. Contact</h2>
+        <p>For questions about these Terms, please contact:</p>
+        <div class="mt-4 p-6 bg-neutral-light rounded-xl">
+          <p class="font-bold text-primary">Ethyl Merc Group Limited</p>
+          <p>{siteConfig.contact.address}</p>
+          <p>Email: <a href={`mailto:${siteConfig.contact.email}`} class="text-accent hover:underline">{siteConfig.contact.email}</a></p>
+          <p>Phone: <a href={`tel:${siteConfig.contact.phone}`} class="text-accent hover:underline">{siteConfig.contact.phone}</a></p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Layout>
