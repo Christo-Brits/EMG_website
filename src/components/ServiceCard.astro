@@ -1,30 +1,66 @@
 ---
-import { ArrowRight } from "lucide-react";
-
 interface Props {
   title: string;
   description: string;
   href: string;
-  icon?: any; // Accepting lucide icon component or string
+  icon?: string;
 }
 
-const { title, description, href, icon: Icon } = Astro.props;
+const { title, description, href, icon } = Astro.props;
+
+const iconPaths: Record<string, string[]> = {
+  "droplet": ["M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"],
+  "zap": ["M13 2L3 14h9l-1 8 10-12h-9l1-8z"],
+  "hammer": [
+    "M15 12l-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L12 9",
+    "M12.88 7.88L17 4a2.12 2.12 0 0 1 3 3l-3.88 3.88",
+    "M2 19.5l1-1",
+    "M12.88 7.88l2.12 2.12",
+  ],
+  "paintbrush": [
+    "M18.37 2.63a2.12 2.12 0 0 1 3 3L14 13l-4 1 1-4 7.37-7.37z",
+    "M9 8c-3 1-5 4-5 7a5 5 0 0 0 5 5c3 0 6-2 7-5",
+  ],
+  "thermometer": ["M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"],
+  "hard-hat": [
+    "M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v2z",
+    "M10 15V6a2 2 0 0 1 4 0v9",
+    "M4 15v-3a8 8 0 0 1 16 0v3",
+  ],
+  "calendar-check": [
+    "M16 2v4", "M8 2v4", "M3 10h18", "M8 14l2 2 4-4",
+    "M21 6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6z",
+  ],
+  "siren": [
+    "M7 18v-6a5 5 0 1 1 10 0v6", "M5 21h14", "M12 2v1",
+    "M4.22 7.22l.71.71", "M1 13h1", "M19.07 7.93l.71-.71", "M23 13h-1",
+  ],
+};
+
+const paths = icon ? iconPaths[icon] : undefined;
 ---
 
 <a href={href} class="group block h-full p-8 bg-white border border-slate-200 rounded-xl hover:border-accent hover:shadow-xl hover:shadow-accent/5 transition-all duration-300 relative overflow-hidden">
   <div class="absolute top-0 left-0 w-1 h-full bg-accent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-  
+
   <div class="h-14 w-14 bg-slate-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-white transition-colors duration-300 border border-slate-100">
-     {Icon ? <Icon className="w-7 h-7" /> : <span class="font-bold text-xl">S</span>}
+     {paths ? (
+       <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+         {paths.map((d: string) => <path d={d} />)}
+       </svg>
+     ) : <span class="font-bold text-xl">S</span>}
   </div>
-  
+
   <h3 class="text-2xl font-heading font-bold text-primary mb-3 group-hover:text-accent transition-colors">{title}</h3>
-  
+
   <p class="text-slate-600 mb-8 line-clamp-3 leading-relaxed">
     {description}
   </p>
-  
+
   <div class="mt-auto flex items-center text-sm font-bold text-accent uppercase tracking-wide">
-    Explore Service <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+    Explore Service
+    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+      <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+    </svg>
   </div>
 </a>
