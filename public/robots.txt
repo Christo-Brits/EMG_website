@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://emgroup.co.nz/sitemap-index.xml
+Sitemap: https://ethylmerc.co.nz/sitemap-index.xml
