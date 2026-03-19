@@ -74,10 +74,11 @@ const websiteSchema = {
 
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         {sortedServices.map((service) => (
-          <ServiceCard 
+          <ServiceCard
             title={service.data.title}
             description={service.data.description}
             href={`/services/${getSlug(service.id)}`}
+            icon={service.data.icon}
           />
         ))}
       </div>
